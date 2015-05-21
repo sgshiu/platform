@@ -1,4 +1,4 @@
-OBJ = main.o list.o
+OBJ = main.o 
 FLAG = -Wall -g 
 LIB = -lpthread
 INCLUDE = -I./

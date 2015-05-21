@@ -11,25 +11,27 @@ struct list
 extern "C" {
 #endif
 
+#define LIST_EXTENDS() struct list super
+
 #define list_init(h) (h)->prev = h; (h)->next = h;
 
-#define list_entity(h, name, type) (void*)((unsigned long)(h) - (unsigned long)(&((type*)0)->name))
+#define list_entity(h, type) (type*)(h)
 
 #define list_insert_next(h, p) \
-	(p)->next = (h)->next;\
-	(p)->prev = h;\
-	(h)->next->prev = p;\
-	(h)->next = p
+	((struct list*)(p))->next = ((struct list*)(h))->next;\
+	((struct list*)(p))->prev = (struct list*)(h);\
+	((struct list*)(h))->next->prev = (struct list*)(p);\
+	((struct list*)(h))->next = (struct list*)(p)
 
 #define list_insert_prev(h, p) \
-	(p)->prev = (h)->prev;\
-	(p)->next = h;\
-	(h)->prev->next = p;\
-	(h)->prev = p
+	((struct list*)(p))->prev = ((struct list*)(h))->prev;\
+	((struct list*)(p))->next = (struct list*)(h);\
+	((struct list*)(h))->prev->next = (struct list*)(p);\
+	((struct list*)(h))->prev = (struct list*)(p)
 
-#define list_next(h) (h)->next
-
-#define list_prev(h) (h)->prev
+#define list_remove(h) \
+	((struct list*)(h))->prev->next = ((struct list*)(h))->next;\
+	((struct list*)(h))->next->prev = ((struct list*)(h))->prev
 
 #ifdef __cplusplus
 }

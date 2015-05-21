@@ -6,38 +6,32 @@
 
 struct my_list
 {
+	LIST_EXTENDS();
 	int val;
-	struct list context;
 };
 
-int main(int argc, char *argv[])
+int main() 
 {
-	struct list h, *hp;
-	struct my_list h1, h2, h3;
-	struct my_list *p = NULL;
+	struct list data, *h;
+	struct my_list d1, d2, d3, *p;
 
-	h1.val = 1;
-	h2.val = 2;
-	h3.val = 3;
+	((struct list*)(&data))->prev = (struct list*)(&d1);
 
-	list_init(&h);
-	list_insert_prev(&h, &h1.context);
-	list_insert_next(&h, &h2.context);
-	list_insert_next(&h, &h3.context);
+	list_init(&data);
 
-	p = list_entity(list_next(&h), context, struct my_list);
-	assert(p->val == 3);
-	p = list_entity(list_next(&p->context), context, struct my_list);
-	assert(p->val == 2);
-	p = list_entity(list_next(&p->context), context, struct my_list);
-	assert(p->val == 1);
+	d1.val = 1;
+	d2.val = 2;
+	d3.val = 3;
 
-	for (hp = h.next; hp != &h; hp = hp->next) {
-		p = list_entity(hp, context, struct my_list);
+	list_insert_prev(&data, &d1);
+	list_insert_next(&data, &d2);
+	list_insert_next(&d2, &d3);
+
+	for (h = data.next; h != &data; h = h->next) {
+		p = list_entity(h, struct my_list);
 		printf("val = %d\r\n", p->val);
 	}
-
-	printf("done\r\n");
 	
+
 	return 0;
 }
