@@ -6,16 +6,14 @@
 
 struct my_list
 {
-	LIST_EXTENDS();
 	int val;
+	struct list super;
 };
 
 int main() 
 {
 	struct list data, *h;
-	struct my_list d1, d2, d3, *p;
-
-	((struct list*)(&data))->prev = (struct list*)(&d1);
+	struct my_list d1, d2, d3;
 
 	list_init(&data);
 
@@ -23,12 +21,12 @@ int main()
 	d2.val = 2;
 	d3.val = 3;
 
-	list_insert_prev(&data, &d1);
-	list_insert_next(&data, &d2);
-	list_insert_next(&d2, &d3);
+	list_insert_prev(&data, &d1.super);
+	list_insert_next(&data, &d2.super);
+	list_insert_next(&d2.super, &d3.super);
 
 	for (h = data.next; h != &data; h = h->next) {
-		p = list_entity(h, struct my_list);
+		struct my_list *p = list_entity(h, super, struct my_list);
 		printf("val = %d\r\n", p->val);
 	}
 	
